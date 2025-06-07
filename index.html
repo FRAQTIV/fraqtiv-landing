@@ -5,26 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRAQTIV - Turning Legacy Operations Into Buyer-Ready Growth Engines</title>
     
-    <!-- Security Headers -->
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+    <!-- Security headers now handled via vercel.json HTTP headers -->
     
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="
-      default-src 'self';
-      script-src 'self' https://cdn.tailwindcss.com https://esm.sh;
-      style-src 'self' https://cdn.tailwindcss.com;
-      img-src 'self' data: https:;
-      font-src 'self' https: data:;
-      connect-src 'self' https:;
-      frame-ancestors 'none';
-      base-uri 'self';
-      form-action 'self';
-    ">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module" src="/src/tailwind.config.js"></script>
 <script type="importmap">
 {
   "imports": {
@@ -34,6 +16,8 @@
   }
 }
 </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="/src/tailwind.config.js"></script>
 <link rel="stylesheet" href="/index.css">
 </head>
 <body class="bg-dark-bg text-light-text font-sans antialiased">

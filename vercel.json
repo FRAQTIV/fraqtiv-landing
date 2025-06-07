@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/submit-intake.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
@@ -21,7 +26,7 @@
         },
         {
           "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
         },
         {
           "key": "Strict-Transport-Security",
@@ -36,8 +41,8 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     }
   ]
 } 

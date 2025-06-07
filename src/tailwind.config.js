@@ -1,4 +1,6 @@
-window.tailwind.config = {
+// Check if tailwind is available before configuring
+if (typeof window !== 'undefined' && window.tailwind) {
+  window.tailwind.config = {
   theme: {
     extend: {
       colors: {
@@ -21,4 +23,5 @@ window.tailwind.config = {
       }
     }
   }
-}; 
+};
+} 
