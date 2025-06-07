@@ -10,6 +10,7 @@ export interface FeatureItem {
 export interface IntakeFormData {
   fullName: string;
   businessEmail: string;
+  phoneNumber: string;
   companyName: string;
   industry: string;
   customIndustry?: string;

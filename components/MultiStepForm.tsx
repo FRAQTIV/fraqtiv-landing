@@ -56,7 +56,7 @@ const MultiStepForm: React.FC = () => {
     }
   });
 
-  const totalSteps = 8;
+  const totalSteps = 9;
 
   const industryOptions = [
     'IT Services',
@@ -108,9 +108,12 @@ const MultiStepForm: React.FC = () => {
             setFocus('businessEmail');
             break;
           case 3:
+            setFocus('phoneNumber');
+            break;
+          case 4:
             setFocus('companyName');
             break;
-          case 8:
+          case 9:
             setFocus('additionalNotes');
             break;
           default:
@@ -128,7 +131,7 @@ const MultiStepForm: React.FC = () => {
 
   const nextStep = async () => {
     // Special validation for pain points step
-    if (currentStep === 7) {
+    if (currentStep === 8) {
       if (watchedPainPoints.length === 0) {
         return; // Don't proceed if no pain points selected
       }
@@ -169,12 +172,13 @@ const MultiStepForm: React.FC = () => {
     switch (step) {
       case 1: return ['fullName'];
       case 2: return ['businessEmail'];
-      case 3: return ['companyName'];
-      case 4: return watchedIndustry === 'Other' ? ['industry', 'customIndustry'] : ['industry'];
-      case 5: return ['revenueRange'];
-      case 6: return ['exitTimeline'];
-      case 7: return watchedPainPoints.includes('Other') ? ['painPoints', 'customPainPoint'] : ['painPoints'];
-      case 8: return []; // Optional field
+      case 3: return ['phoneNumber'];
+      case 4: return ['companyName'];
+      case 5: return watchedIndustry === 'Other' ? ['industry', 'customIndustry'] : ['industry'];
+      case 6: return ['revenueRange'];
+      case 7: return ['exitTimeline'];
+      case 8: return watchedPainPoints.includes('Other') ? ['painPoints', 'customPainPoint'] : ['painPoints'];
+      case 9: return []; // Optional field
       default: return [];
     }
   };
@@ -266,8 +270,29 @@ const MultiStepForm: React.FC = () => {
             </div>
           </Step>
 
-          {/* Step 3: Company Name */}
-          <Step title="What's your company name?" isActive={currentStep === 3}>
+          {/* Step 3: Phone Number */}
+          <Step title="What's the best phone number for us to reach you?" isActive={currentStep === 3}>
+            <div className="space-y-4">
+              <input
+                {...register('phoneNumber', { 
+                  required: 'Phone number is required',
+                  pattern: {
+                    value: /^[\+]?[1-9][\d]{0,15}$/,
+                    message: 'Please enter a valid phone number'
+                  }
+                })}
+                type="tel"
+                placeholder="(555) 123-4567"
+                className="w-full p-4 bg-slate-700 border border-slate-600 rounded-lg text-light-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+              />
+              {errors.phoneNumber && (
+                <p className="text-red-400 text-sm">{errors.phoneNumber.message}</p>
+              )}
+            </div>
+          </Step>
+
+          {/* Step 4: Company Name */}
+          <Step title="What's your company name?" isActive={currentStep === 4}>
             <div className="space-y-4">
               <input
                 {...register('companyName', { required: 'Company name is required' })}
@@ -281,8 +306,8 @@ const MultiStepForm: React.FC = () => {
             </div>
           </Step>
 
-          {/* Step 4: Industry */}
-          <Step title="What industry are you in?" isActive={currentStep === 4}>
+          {/* Step 5: Industry */}
+          <Step title="What industry are you in?" isActive={currentStep === 5}>
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {industryOptions.map((industry) => (
@@ -322,8 +347,8 @@ const MultiStepForm: React.FC = () => {
             )}
           </Step>
 
-          {/* Step 5: Revenue Range */}
-          <Step title="What's your annual revenue range?" isActive={currentStep === 5}>
+          {/* Step 6: Revenue Range */}
+          <Step title="What's your annual revenue range?" isActive={currentStep === 6}>
             <div className="space-y-3">
               {revenueOptions.map((range) => (
                 <label key={range} className="relative block">
@@ -344,8 +369,8 @@ const MultiStepForm: React.FC = () => {
             )}
           </Step>
 
-          {/* Step 6: Exit Timeline */}
-          <Step title="What's your target exit timeline?" isActive={currentStep === 6}>
+          {/* Step 7: Exit Timeline */}
+          <Step title="What's your target exit timeline?" isActive={currentStep === 7}>
             <div className="space-y-3">
               {timelineOptions.map((timeline) => (
                 <label key={timeline} className="relative block">
@@ -366,8 +391,8 @@ const MultiStepForm: React.FC = () => {
             )}
           </Step>
 
-          {/* Step 7: Pain Points */}
-          <Step title="What are your primary pain points? (Select all that apply)" isActive={currentStep === 7}>
+          {/* Step 8: Pain Points */}
+          <Step title="What are your primary pain points? (Select all that apply)" isActive={currentStep === 8}>
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {painPointOptions.map((painPoint) => (
@@ -409,8 +434,8 @@ const MultiStepForm: React.FC = () => {
             </div>
           </Step>
 
-          {/* Step 8: Additional Notes */}
-          <Step title="Anything else you'd like our team to know?" isActive={currentStep === 8}>
+          {/* Step 9: Additional Notes */}
+          <Step title="Anything else you'd like our team to know?" isActive={currentStep === 9}>
             <div className="space-y-4">
               <textarea
                 {...register('additionalNotes')}
@@ -422,8 +447,15 @@ const MultiStepForm: React.FC = () => {
             </div>
           </Step>
 
+          {/* Privacy Statement */}
+          <div className="mt-8 mb-6 text-center">
+            <p className="text-xs text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              <span className="font-medium">Privacy Notice:</span> FRAQTIV maintains a strict 'no-sell' policy. Under no circumstances will we sell, rent, trade, or otherwise transfer to outside parties any personally identifiable information, except as required by law or with your explicit consent.
+            </p>
+          </div>
+
           {/* Navigation */}
-          <div className="flex justify-between items-center mt-12">
+          <div className="flex justify-between items-center mt-8">
             <button
               type="button"
               onClick={prevStep}
