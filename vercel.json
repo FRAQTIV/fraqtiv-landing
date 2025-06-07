@@ -36,18 +36,8 @@
   ],
   "rewrites": [
     {
-      "source": "/get-started",
+      "source": "/(.*)",
       "destination": "/index.html"
-    },
-    {
-      "source": "/((?!api|_next|static|images|favicon).*)",
-      "destination": "/index.html"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/get-started",
-      "dest": "/index.html"
     }
   ]
 } 
