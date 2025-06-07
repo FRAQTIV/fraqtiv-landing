@@ -22,8 +22,14 @@ export default defineConfig({
     sourcemap: false, // Don't expose source maps in production
     rollupOptions: {
       output: {
-        // Remove comments and console logs in production
         format: 'es'
+      }
+    },
+    terserOptions: {
+      compress: {
+        // Remove console logs and debugger statements in production
+        drop_console: true,
+        drop_debugger: true
       }
     }
   }

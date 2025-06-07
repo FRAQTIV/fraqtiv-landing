@@ -14,8 +14,8 @@
     <!-- Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://esm.sh;
-      style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;
+      script-src 'self' https://cdn.tailwindcss.com https://esm.sh;
+      style-src 'self' https://cdn.tailwindcss.com;
       img-src 'self' data: https:;
       font-src 'self' https: data:;
       connect-src 'self' https:;
@@ -24,45 +24,7 @@
       form-action 'self';
     ">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'brand-primary': '#0EA5E9', // sky-500
-              'brand-secondary': '#38BDF8', // sky-400
-              'dark-bg': '#0F172A', // slate-900
-              'dark-card': '#1E293B', // slate-800
-              'light-text': '#F8FAFC', // slate-50
-              'medium-text': '#CBD5E1', // slate-300
-              'subtle-text': '#94A3B8', // slate-400
-            },
-            animation: {
-              'pulse-slow': 'pulse-custom 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            },
-            keyframes: {
-              'pulse-custom': {
-                '0%, 100%': { opacity: '0.6' },
-                '50%': { opacity: '0.2' },
-              }
-            }
-          }
-        }
-      }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-          .animation-delay-2000 {
-            animation-delay: 2s;
-          }
-          .animation-delay-4000 {
-            animation-delay: 4s;
-          }
-          html {
-            scroll-behavior: smooth;
-          }
-        }
-    </style>
+    <script src="/src/tailwind.config.js"></script>
 <script type="importmap">
 {
   "imports": {
