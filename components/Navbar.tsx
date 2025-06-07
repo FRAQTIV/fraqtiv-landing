@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,12 +28,12 @@ const Navbar: React.FC = () => {
                 {link.label}
               </a>
             ))}
-            <a
-              href="/get-started"
+            <Link
+              to="/get-started"
               className="bg-brand-primary hover:bg-brand-secondary text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition-transform transform hover:scale-105"
             >
               Get Started
-            </a>
+            </Link>
           </div>
 
           <div className="md:hidden">
@@ -60,13 +61,13 @@ const Navbar: React.FC = () => {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="/get-started"
+              <Link
+                to="/get-started"
                 className="bg-brand-primary hover:bg-brand-secondary text-white font-semibold px-4 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105 text-center mt-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Get Started
-              </a>
+              </Link>
             </div>
           </div>
         )}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   return (
@@ -24,12 +25,12 @@ const Hero: React.FC = () => {
           Buyers don't just buy balance sheets—they buy systems that scale. The big diligence deal‑killers are legacy tech, brittle processes, and fuzzy revenue logic. FRAQTIV plugs in operator‑grade leadership to modernize your IT architecture, streamline operations, and sharpen your business model—sculpt a company that commands a premium.
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
-          <a
-            href="#cta"
+          <Link
+            to="/get-started"
             className="w-full sm:w-auto bg-brand-primary hover:bg-brand-secondary text-white font-semibold px-8 py-4 rounded-lg shadow-xl text-lg transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 focus:ring-offset-dark-bg hover:shadow-2xl"
           >
             Contact Us
-          </a>
+          </Link>
           <a
             href="#services"
             className="w-full sm:w-auto bg-dark-card hover:bg-slate-700 text-medium-text font-semibold px-8 py-4 rounded-lg shadow-xl text-lg transition-all duration-300 ease-in-out transform hover:scale-105 border border-slate-600 hover:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-dark-bg hover:shadow-2xl"

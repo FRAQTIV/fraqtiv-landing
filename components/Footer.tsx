@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const GithubIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg className={className || "w-6 h-6"} viewBox="0 0 24 24" fill="currentColor">
@@ -37,7 +38,7 @@ const Footer: React.FC = () => {
           
           <div className="md:col-span-1 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-6">
             <a href="#services" className="text-medium-text hover:text-light-text transition-colors duration-200 hover:underline">Services</a>
-            <a href="/get-started" className="text-medium-text hover:text-light-text transition-colors duration-200 hover:underline">Get Started</a>
+                            <Link to="/get-started" className="text-medium-text hover:text-light-text transition-colors duration-200 hover:underline">Get Started</Link>
             <a href="mailto:josh@fraqtiv.com" className="text-medium-text hover:text-light-text transition-colors duration-200 hover:underline">Contact</a>
           </div>
 
