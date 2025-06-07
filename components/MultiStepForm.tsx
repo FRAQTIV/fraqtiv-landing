@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { ChevronLeftIcon, ChevronRightIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { useForm, Controller } from 'react-hook-form';
+import { ChevronLeftIcon, ChevronRightIcon, CheckIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import ProgressBar from './ProgressBar';
 import Step from './Step';
 import { IntakeFormData } from '../types';
@@ -11,6 +11,8 @@ const MultiStepForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState({ code: 'US', name: 'United States', flag: '🇺🇸', dialCode: '+1' });
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
 
   // Email validation with common domain extensions
   const validateEmail = (email: string): boolean | string => {
@@ -50,7 +52,7 @@ const MultiStepForm: React.FC = () => {
     return true;
   };
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue } = useForm<IntakeFormData>({
+  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue, control } = useForm<IntakeFormData>({
     defaultValues: {
       painPoints: []
     }
@@ -59,7 +61,7 @@ const MultiStepForm: React.FC = () => {
   // Register the painPoints field with validation
   const { ref, ...painPointsReg } = register('painPoints', { 
     required: 'Please select at least one pain point',
-    validate: (value) => value && value.length > 0 ? true : 'Please select at least one pain point'
+    validate: () => watchedPainPoints.length > 0 ? true : 'Please select at least one pain point'
   });
 
   const totalSteps = 9;
@@ -100,6 +102,118 @@ const MultiStepForm: React.FC = () => {
     'Other'
   ];
 
+  const countries = [
+    { code: 'US', name: 'United States', flag: '🇺🇸', dialCode: '+1' },
+    { code: 'CA', name: 'Canada', flag: '🇨🇦', dialCode: '+1' },
+    { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', dialCode: '+44' },
+    { code: 'AU', name: 'Australia', flag: '🇦🇺', dialCode: '+61' },
+    { code: 'DE', name: 'Germany', flag: '🇩🇪', dialCode: '+49' },
+    { code: 'FR', name: 'France', flag: '🇫🇷', dialCode: '+33' },
+    { code: 'IT', name: 'Italy', flag: '🇮🇹', dialCode: '+39' },
+    { code: 'ES', name: 'Spain', flag: '🇪🇸', dialCode: '+34' },
+    { code: 'NL', name: 'Netherlands', flag: '🇳🇱', dialCode: '+31' },
+    { code: 'SE', name: 'Sweden', flag: '🇸🇪', dialCode: '+46' },
+    { code: 'NO', name: 'Norway', flag: '🇳🇴', dialCode: '+47' },
+    { code: 'DK', name: 'Denmark', flag: '🇩🇰', dialCode: '+45' },
+    { code: 'CH', name: 'Switzerland', flag: '🇨🇭', dialCode: '+41' },
+    { code: 'BE', name: 'Belgium', flag: '🇧🇪', dialCode: '+32' },
+    { code: 'AT', name: 'Austria', flag: '🇦🇹', dialCode: '+43' },
+    { code: 'JP', name: 'Japan', flag: '🇯🇵', dialCode: '+81' },
+    { code: 'KR', name: 'South Korea', flag: '🇰🇷', dialCode: '+82' },
+    { code: 'SG', name: 'Singapore', flag: '🇸🇬', dialCode: '+65' },
+    { code: 'IN', name: 'India', flag: '🇮🇳', dialCode: '+91' },
+    { code: 'BR', name: 'Brazil', flag: '🇧🇷', dialCode: '+55' },
+    { code: 'MX', name: 'Mexico', flag: '🇲🇽', dialCode: '+52' },
+    { code: 'AR', name: 'Argentina', flag: '🇦🇷', dialCode: '+54' },
+    { code: 'CL', name: 'Chile', flag: '🇨🇱', dialCode: '+56' },
+    { code: 'CO', name: 'Colombia', flag: '🇨🇴', dialCode: '+57' },
+    { code: 'PE', name: 'Peru', flag: '🇵🇪', dialCode: '+51' },
+    { code: 'VE', name: 'Venezuela', flag: '🇻🇪', dialCode: '+58' },
+    { code: 'UY', name: 'Uruguay', flag: '🇺🇾', dialCode: '+598' },
+    { code: 'PY', name: 'Paraguay', flag: '🇵🇾', dialCode: '+595' },
+    { code: 'BO', name: 'Bolivia', flag: '🇧🇴', dialCode: '+591' },
+    { code: 'EC', name: 'Ecuador', flag: '🇪🇨', dialCode: '+593' },
+    { code: 'CN', name: 'China', flag: '🇨🇳', dialCode: '+86' },
+    { code: 'HK', name: 'Hong Kong', flag: '🇭🇰', dialCode: '+852' },
+    { code: 'TW', name: 'Taiwan', flag: '🇹🇼', dialCode: '+886' },
+    { code: 'TH', name: 'Thailand', flag: '🇹🇭', dialCode: '+66' },
+    { code: 'VN', name: 'Vietnam', flag: '🇻🇳', dialCode: '+84' },
+    { code: 'PH', name: 'Philippines', flag: '🇵🇭', dialCode: '+63' },
+    { code: 'ID', name: 'Indonesia', flag: '🇮🇩', dialCode: '+62' },
+    { code: 'MY', name: 'Malaysia', flag: '🇲🇾', dialCode: '+60' },
+    { code: 'NZ', name: 'New Zealand', flag: '🇳🇿', dialCode: '+64' },
+    { code: 'ZA', name: 'South Africa', flag: '🇿🇦', dialCode: '+27' },
+    { code: 'NG', name: 'Nigeria', flag: '🇳🇬', dialCode: '+234' },
+    { code: 'KE', name: 'Kenya', flag: '🇰🇪', dialCode: '+254' },
+    { code: 'EG', name: 'Egypt', flag: '🇪🇬', dialCode: '+20' },
+    { code: 'MA', name: 'Morocco', flag: '🇲🇦', dialCode: '+212' },
+    { code: 'TN', name: 'Tunisia', flag: '🇹🇳', dialCode: '+216' },
+    { code: 'DZ', name: 'Algeria', flag: '🇩🇿', dialCode: '+213' },
+    { code: 'LY', name: 'Libya', flag: '🇱🇾', dialCode: '+218' },
+    { code: 'SD', name: 'Sudan', flag: '🇸🇩', dialCode: '+249' },
+    { code: 'ET', name: 'Ethiopia', flag: '🇪🇹', dialCode: '+251' },
+    { code: 'GH', name: 'Ghana', flag: '🇬🇭', dialCode: '+233' },
+    { code: 'UG', name: 'Uganda', flag: '🇺🇬', dialCode: '+256' },
+    { code: 'TZ', name: 'Tanzania', flag: '🇹🇿', dialCode: '+255' },
+    { code: 'RU', name: 'Russia', flag: '🇷🇺', dialCode: '+7' },
+    { code: 'UA', name: 'Ukraine', flag: '🇺🇦', dialCode: '+380' },
+    { code: 'PL', name: 'Poland', flag: '🇵🇱', dialCode: '+48' },
+    { code: 'CZ', name: 'Czech Republic', flag: '🇨🇿', dialCode: '+420' },
+    { code: 'SK', name: 'Slovakia', flag: '🇸🇰', dialCode: '+421' },
+    { code: 'HU', name: 'Hungary', flag: '🇭🇺', dialCode: '+36' },
+    { code: 'RO', name: 'Romania', flag: '🇷🇴', dialCode: '+40' },
+    { code: 'BG', name: 'Bulgaria', flag: '🇧🇬', dialCode: '+359' },
+    { code: 'HR', name: 'Croatia', flag: '🇭🇷', dialCode: '+385' },
+    { code: 'SI', name: 'Slovenia', flag: '🇸🇮', dialCode: '+386' },
+    { code: 'RS', name: 'Serbia', flag: '🇷🇸', dialCode: '+381' },
+    { code: 'BA', name: 'Bosnia and Herzegovina', flag: '🇧🇦', dialCode: '+387' },
+    { code: 'ME', name: 'Montenegro', flag: '🇲🇪', dialCode: '+382' },
+    { code: 'MK', name: 'North Macedonia', flag: '🇲🇰', dialCode: '+389' },
+    { code: 'AL', name: 'Albania', flag: '🇦🇱', dialCode: '+355' },
+    { code: 'GR', name: 'Greece', flag: '🇬🇷', dialCode: '+30' },
+    { code: 'CY', name: 'Cyprus', flag: '🇨🇾', dialCode: '+357' },
+    { code: 'TR', name: 'Turkey', flag: '🇹🇷', dialCode: '+90' },
+    { code: 'IL', name: 'Israel', flag: '🇮🇱', dialCode: '+972' },
+    { code: 'AE', name: 'United Arab Emirates', flag: '🇦🇪', dialCode: '+971' },
+    { code: 'SA', name: 'Saudi Arabia', flag: '🇸🇦', dialCode: '+966' },
+    { code: 'QA', name: 'Qatar', flag: '🇶🇦', dialCode: '+974' },
+    { code: 'KW', name: 'Kuwait', flag: '🇰🇼', dialCode: '+965' },
+    { code: 'BH', name: 'Bahrain', flag: '🇧🇭', dialCode: '+973' },
+    { code: 'OM', name: 'Oman', flag: '🇴🇲', dialCode: '+968' },
+    { code: 'JO', name: 'Jordan', flag: '🇯🇴', dialCode: '+962' },
+    { code: 'LB', name: 'Lebanon', flag: '🇱🇧', dialCode: '+961' },
+    { code: 'SY', name: 'Syria', flag: '🇸🇾', dialCode: '+963' },
+    { code: 'IQ', name: 'Iraq', flag: '🇮🇶', dialCode: '+964' },
+    { code: 'IR', name: 'Iran', flag: '🇮🇷', dialCode: '+98' },
+    { code: 'PK', name: 'Pakistan', flag: '🇵🇰', dialCode: '+92' },
+    { code: 'BD', name: 'Bangladesh', flag: '🇧🇩', dialCode: '+880' },
+    { code: 'LK', name: 'Sri Lanka', flag: '🇱🇰', dialCode: '+94' },
+    { code: 'NP', name: 'Nepal', flag: '🇳🇵', dialCode: '+977' },
+    { code: 'BT', name: 'Bhutan', flag: '🇧🇹', dialCode: '+975' },
+    { code: 'MV', name: 'Maldives', flag: '🇲🇻', dialCode: '+960' },
+    { code: 'AF', name: 'Afghanistan', flag: '🇦🇫', dialCode: '+93' },
+    { code: 'KZ', name: 'Kazakhstan', flag: '🇰🇿', dialCode: '+7' },
+    { code: 'UZ', name: 'Uzbekistan', flag: '🇺🇿', dialCode: '+998' },
+    { code: 'TM', name: 'Turkmenistan', flag: '🇹🇲', dialCode: '+993' },
+    { code: 'TJ', name: 'Tajikistan', flag: '🇹🇯', dialCode: '+992' },
+    { code: 'KG', name: 'Kyrgyzstan', flag: '🇰🇬', dialCode: '+996' },
+    { code: 'MN', name: 'Mongolia', flag: '🇲🇳', dialCode: '+976' },
+    { code: 'FI', name: 'Finland', flag: '🇫🇮', dialCode: '+358' },
+    { code: 'EE', name: 'Estonia', flag: '🇪🇪', dialCode: '+372' },
+    { code: 'LV', name: 'Latvia', flag: '🇱🇻', dialCode: '+371' },
+    { code: 'LT', name: 'Lithuania', flag: '🇱🇹', dialCode: '+370' },
+    { code: 'BY', name: 'Belarus', flag: '🇧🇾', dialCode: '+375' },
+    { code: 'MD', name: 'Moldova', flag: '🇲🇩', dialCode: '+373' },
+    { code: 'AM', name: 'Armenia', flag: '🇦🇲', dialCode: '+374' },
+    { code: 'GE', name: 'Georgia', flag: '🇬🇪', dialCode: '+995' },
+    { code: 'AZ', name: 'Azerbaijan', flag: '🇦🇿', dialCode: '+994' },
+    { code: 'PT', name: 'Portugal', flag: '🇵🇹', dialCode: '+351' },
+    { code: 'IE', name: 'Ireland', flag: '🇮🇪', dialCode: '+353' },
+    { code: 'IS', name: 'Iceland', flag: '🇮🇸', dialCode: '+354' },
+    { code: 'LU', name: 'Luxembourg', flag: '🇱🇺', dialCode: '+352' },
+    { code: 'MT', name: 'Malta', flag: '🇲🇹', dialCode: '+356' },
+  ];
+
   const watchedPainPoints = watch('painPoints') || [];
 
   // Auto-focus when step changes
@@ -135,10 +249,36 @@ const MultiStepForm: React.FC = () => {
     focusField();
   }, [currentStep, setFocus]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.custom-phone-input')) {
+        setIsCountryDropdownOpen(false);
+      }
+    };
+
+    if (isCountryDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isCountryDropdownOpen]);
+
   const nextStep = async () => {
-    const fieldsToValidate = getFieldsForStep(currentStep);
-    const isValid = await trigger(fieldsToValidate);
-    if (!isValid) return;
+    // Special handling for pain points step
+    if (currentStep === 8) {
+      if (watchedPainPoints.length === 0) {
+        return; // Don't proceed if no pain points selected
+      }
+      if (watchedPainPoints.includes('Other')) {
+        const isValid = await trigger(['customPainPoint']);
+        if (!isValid) return;
+      }
+    } else {
+      const fieldsToValidate = getFieldsForStep(currentStep);
+      const isValid = await trigger(fieldsToValidate);
+      if (!isValid) return;
+    }
     
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
@@ -181,7 +321,15 @@ const MultiStepForm: React.FC = () => {
   const onSubmit = async (data: IntakeFormData) => {
     setIsSubmitting(true);
     try {
-      const result = await submitIntakeForm(data);
+      // Combine country code with phone number and use state for pain points
+      const completePhoneNumber = `${selectedCountry.dialCode} ${data.phoneNumber}`.trim();
+      const formDataWithFullPhone = {
+        ...data,
+        phoneNumber: completePhoneNumber,
+        painPoints: watchedPainPoints  // Use state instead of form field
+      };
+      
+      const result = await submitIntakeForm(formDataWithFullPhone);
       setSubmitMessage(result.message);
       setIsSubmitted(true);
     } catch (error) {
@@ -268,18 +416,73 @@ const MultiStepForm: React.FC = () => {
           {/* Step 3: Phone Number */}
           <Step title="What's the best phone number for us to reach you?" isActive={currentStep === 3}>
             <div className="space-y-4">
-              <input
-                {...register('phoneNumber', { 
-                  required: 'Phone number is required',
-                  pattern: {
-                    value: /^[\+]?[1-9][\d]{0,15}$/,
-                    message: 'Please enter a valid phone number'
-                  }
-                })}
-                type="tel"
-                placeholder="(555) 123-4567"
-                className="w-full p-4 bg-slate-700 border border-slate-600 rounded-lg text-light-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-              />
+                              <div className="custom-phone-input">
+                  <div 
+                    className="country-selector"
+                    onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                  >
+                    <span className="flag">{selectedCountry.flag}</span>
+                    <span className="country-code">{selectedCountry.dialCode}</span>
+                    <ChevronDownIcon className={`w-4 h-4 text-slate-400 transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  
+                  {isCountryDropdownOpen && (
+                    <div className="country-dropdown">
+                      {countries.map((country) => (
+                        <div
+                          key={country.code}
+                          className="country-option"
+                          onClick={() => {
+                            setSelectedCountry(country);
+                            setIsCountryDropdownOpen(false);
+                          }}
+                        >
+                          <span className="flag">{country.flag}</span>
+                          <span className="country-name">{country.name}</span>
+                          <span className="dial-code">{country.dialCode}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <input
+                    {...register('phoneNumber', { 
+                      required: 'Phone number is required',
+                      validate: (value) => {
+                        if (!value || value.replace(/\D/g, '').length < 7) {
+                          return 'Please enter a valid phone number';
+                        }
+                        return true;
+                      }
+                    })}
+                    type="tel"
+                    placeholder={selectedCountry.code === 'US' || selectedCountry.code === 'CA' ? "(555) 123-4567" : "Enter phone number"}
+                    className="phone-number-input"
+                    onChange={(e) => {
+                      // Auto-format based on country
+                      const input = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                      let formatted = '';
+                      
+                      if (selectedCountry.code === 'US' || selectedCountry.code === 'CA') {
+                        // US/Canada format: (555) 123-4567
+                        if (input.length > 0) {
+                          if (input.length <= 3) {
+                            formatted = `(${input}`;
+                          } else if (input.length <= 6) {
+                            formatted = `(${input.slice(0, 3)}) ${input.slice(3)}`;
+                          } else {
+                            formatted = `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
+                          }
+                        }
+                      } else {
+                        // International format: just add spaces every 3-4 digits
+                        formatted = input.replace(/(\d{3,4})(?=\d)/g, '$1 ').trim();
+                      }
+                      
+                      e.target.value = formatted;
+                    }}
+                  />
+                </div>
               {errors.phoneNumber && (
                 <p className="text-red-400 text-sm">{errors.phoneNumber.message}</p>
               )}
@@ -389,12 +592,6 @@ const MultiStepForm: React.FC = () => {
           {/* Step 8: Pain Points */}
           <Step title="What are your primary pain points? (Select all that apply)" isActive={currentStep === 8}>
             <div className="space-y-4">
-              {/* Hidden input to register painPoints field */}
-              <input
-                type="hidden"
-                {...painPointsReg}
-                value={JSON.stringify(watchedPainPoints)}
-              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {painPointOptions.map((painPoint) => (
                   <button
@@ -429,8 +626,8 @@ const MultiStepForm: React.FC = () => {
                 </div>
               )}
               
-              {errors.painPoints && (
-                <p className="text-red-400 text-sm mt-4">{errors.painPoints.message}</p>
+              {watchedPainPoints.length === 0 && (
+                <p className="text-red-400 text-sm mt-4">Please select at least one pain point</p>
               )}
             </div>
           </Step>
