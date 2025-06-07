@@ -50,7 +50,7 @@ const MultiStepForm: React.FC = () => {
     return true;
   };
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus } = useForm<IntakeFormData>({
+  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue } = useForm<IntakeFormData>({
     defaultValues: {
       painPoints: []
     }
@@ -199,9 +199,7 @@ const MultiStepForm: React.FC = () => {
       : [...current, painPoint];
     
     // Update the form value manually since we're using custom UI
-    register('painPoints').onChange({
-      target: { value: updated, name: 'painPoints' }
-    });
+    setValue('painPoints', updated, { shouldValidate: true });
   };
 
   if (isSubmitted) {
