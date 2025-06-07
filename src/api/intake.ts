@@ -1,5 +1,108 @@
 import { IntakeFormData } from '../../types';
 
+// Security constants
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 3;
+const MAX_FIELD_LENGTH = 1000;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Rate limiting storage (in production, use Redis or similar)
+const rateLimitStore = new Map<string, { count: number; lastReset: number }>();
+
+// Input sanitization
+const sanitizeInput = (input: string): string => {
+  return input
+    .trim()
+    .replace(/[<>]/g, '') // Remove potential HTML tags
+    .substring(0, MAX_FIELD_LENGTH); // Limit length
+};
+
+// Validate email format
+const isValidEmail = (email: string): boolean => {
+  return EMAIL_REGEX.test(email) && email.length <= 254; // RFC 5321 limit
+};
+
+// Rate limiting check
+const checkRateLimit = (identifier: string): boolean => {
+  const now = Date.now();
+  const record = rateLimitStore.get(identifier);
+  
+  if (!record || now - record.lastReset > RATE_LIMIT_WINDOW) {
+    rateLimitStore.set(identifier, { count: 1, lastReset: now });
+    return true;
+  }
+  
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    return false;
+  }
+  
+  record.count++;
+  return true;
+};
+
+// Validate and sanitize form data
+const validateAndSanitizeFormData = (data: IntakeFormData): { isValid: boolean; errors: string[]; sanitizedData?: IntakeFormData } => {
+  const errors: string[] = [];
+  
+  // Sanitize all string fields
+  const sanitizedData: IntakeFormData = {
+    fullName: sanitizeInput(data.fullName || ''),
+    businessEmail: sanitizeInput(data.businessEmail || '').toLowerCase(),
+    companyName: sanitizeInput(data.companyName || ''),
+    industry: sanitizeInput(data.industry || ''),
+    customIndustry: data.customIndustry ? sanitizeInput(data.customIndustry) : undefined,
+    revenueRange: sanitizeInput(data.revenueRange || ''),
+    exitTimeline: sanitizeInput(data.exitTimeline || ''),
+    painPoints: Array.isArray(data.painPoints) ? data.painPoints.map(p => sanitizeInput(p)) : [],
+    customPainPoint: data.customPainPoint ? sanitizeInput(data.customPainPoint) : undefined,
+    additionalNotes: data.additionalNotes ? sanitizeInput(data.additionalNotes) : undefined
+  };
+  
+  // Validate required fields
+  if (!sanitizedData.fullName || sanitizedData.fullName.length < 2) {
+    errors.push('Full name must be at least 2 characters long');
+  }
+  
+  if (!sanitizedData.businessEmail || !isValidEmail(sanitizedData.businessEmail)) {
+    errors.push('Please provide a valid business email address');
+  }
+  
+  if (!sanitizedData.companyName || sanitizedData.companyName.length < 2) {
+    errors.push('Company name must be at least 2 characters long');
+  }
+  
+  if (!sanitizedData.industry) {
+    errors.push('Please select an industry');
+  }
+  
+  if (!sanitizedData.revenueRange) {
+    errors.push('Please select a revenue range');
+  }
+  
+  if (!sanitizedData.exitTimeline) {
+    errors.push('Please select an exit timeline');
+  }
+  
+  if (!sanitizedData.painPoints || sanitizedData.painPoints.length === 0) {
+    errors.push('Please select at least one pain point');
+  }
+  
+  // Validate conditional fields
+  if (sanitizedData.industry === 'Other' && !sanitizedData.customIndustry) {
+    errors.push('Please specify your industry');
+  }
+  
+  if (sanitizedData.painPoints.includes('Other') && !sanitizedData.customPainPoint) {
+    errors.push('Please specify your custom pain point');
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors,
+    sanitizedData: errors.length === 0 ? sanitizedData : undefined
+  };
+};
+
 // Email templates
 const getUserEmailTemplate = (data: IntakeFormData) => `
 Dear ${data.fullName},
@@ -66,49 +169,44 @@ const sendEmail = async (to: string, subject: string, body: string): Promise<boo
 };
 
 export const submitIntakeForm = async (data: IntakeFormData): Promise<{ success: boolean; message: string }> => {
-  console.log('Submitting intake form data:', data);
+  console.log('Submitting intake form data (sanitized)');
   
-  // Validate required fields
-  if (!data.fullName || !data.businessEmail || !data.companyName || !data.industry || 
-      !data.revenueRange || !data.exitTimeline || !data.painPoints.length) {
+  // Rate limiting (use email as identifier)
+  const identifier = data.businessEmail || 'anonymous';
+  if (!checkRateLimit(identifier)) {
     return {
       success: false,
-      message: 'Please complete all required fields before submitting.'
+      message: 'Too many submissions. Please wait a moment before trying again.'
     };
   }
   
-  // Validate pain points
-  if (data.painPoints.includes('Other') && !data.customPainPoint) {
+  // Validate and sanitize input data
+  const validation = validateAndSanitizeFormData(data);
+  if (!validation.isValid) {
     return {
       success: false,
-      message: 'Please specify your custom pain point.'
+      message: validation.errors[0] // Return first error
     };
   }
   
-  // Validate industry
-  if (data.industry === 'Other' && !data.customIndustry) {
-    return {
-      success: false,
-      message: 'Please specify your industry.'
-    };
-  }
+  const sanitizedData = validation.sanitizedData!;
   
   try {
     // Send confirmation email to user
     const userEmailSent = await sendEmail(
-      data.businessEmail,
+      sanitizedData.businessEmail,
       'Thank you for your interest in FRAQTIV',
-      getUserEmailTemplate(data)
+      getUserEmailTemplate(sanitizedData)
     );
     
     // Send notification email to Josh
     const adminEmailSent = await sendEmail(
       'josh@fraqtiv.com',
-      `New Intake Form Submission - ${data.companyName}`,
-      getAdminEmailTemplate(data)
+      `New Intake Form Submission - ${sanitizedData.companyName}`,
+      getAdminEmailTemplate(sanitizedData)
     );
     
-    // Log email status
+    // Log email status (but don't expose internal errors to user)
     if (!userEmailSent) {
       console.warn('Failed to send confirmation email to user');
     }
@@ -123,6 +221,7 @@ export const submitIntakeForm = async (data: IntakeFormData): Promise<{ success:
     };
   } catch (error) {
     console.error('Error submitting form:', error);
+    // Don't expose internal error details to user
     return {
       success: false,
       message: 'There was an error submitting your information. Please try again.'
