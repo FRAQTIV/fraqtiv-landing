@@ -274,6 +274,10 @@ const MultiStepForm: React.FC = () => {
         const isValid = await trigger(['customPainPoint']);
         if (!isValid) return;
       }
+    } else if (currentStep === 9) {
+      // Step 9 is the final step - don't auto-advance
+      // User must click Submit button explicitly
+      return;
     } else {
       const fieldsToValidate = getFieldsForStep(currentStep);
       const isValid = await trigger(fieldsToValidate);
@@ -291,9 +295,8 @@ const MultiStepForm: React.FC = () => {
       e.preventDefault();
       if (currentStep < totalSteps) {
         nextStep();
-      } else {
-        handleSubmit(onSubmit)();
       }
+      // Don't auto-submit on final step - require explicit button click
     }
   };
 
@@ -449,8 +452,18 @@ const MultiStepForm: React.FC = () => {
                     {...register('phoneNumber', { 
                       required: 'Phone number is required',
                       validate: (value) => {
-                        if (!value || value.replace(/\D/g, '').length < 7) {
-                          return 'Please enter a valid phone number';
+                        if (!value) {
+                          return 'Phone number is required';
+                        }
+                        const digitsOnly = value.replace(/\D/g, '');
+                        if (selectedCountry.code === 'US' || selectedCountry.code === 'CA') {
+                          if (digitsOnly.length !== 10) {
+                            return 'Please enter a valid 10-digit phone number';
+                          }
+                        } else {
+                          if (digitsOnly.length < 7) {
+                            return 'Please enter a valid phone number';
+                          }
                         }
                         return true;
                       }
@@ -475,11 +488,24 @@ const MultiStepForm: React.FC = () => {
                           }
                         }
                       } else {
-                        // International format: just add spaces every 3-4 digits
-                        formatted = input.replace(/(\d{3,4})(?=\d)/g, '$1 ').trim();
+                        // International format: improved spacing based on number length
+                        if (input.length <= 2) {
+                          formatted = input;
+                        } else if (input.length <= 6) {
+                          // Short international: XX XXX or XXX XXX
+                          formatted = input.replace(/(\d{2,3})(\d{1,3})/, '$1 $2');
+                        } else if (input.length <= 10) {
+                          // Medium international: XX XXX XXXX or XXX XXX XXXX
+                          formatted = input.replace(/(\d{2,3})(\d{3})(\d{1,4})/, '$1 $2 $3');
+                        } else {
+                          // Long international: XX XXX XXX XXXX
+                          formatted = input.replace(/(\d{2,3})(\d{3})(\d{3})(\d{1,4})/, '$1 $2 $3 $4');
+                        }
                       }
                       
-                      e.target.value = formatted;
+                      // Update the form value and trigger validation
+                      setValue('phoneNumber', formatted, { shouldValidate: true });
+                      trigger('phoneNumber');
                     }}
                   />
                 </div>
