@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="md:col-span-1 flex justify-center md:justify-end space-x-5">
-            <a href="https://linkedin.com/company/fraqtiv" target="_blank" rel="noopener noreferrer" className="text-subtle-text hover:text-brand-primary transition-colors duration-200 transform hover:scale-110" title="LinkedIn">
+            <a href="https://www.linkedin.com/company/fraqtiv-inc" target="_blank" rel="noopener noreferrer" className="text-subtle-text hover:text-brand-primary transition-colors duration-200 transform hover:scale-110" title="LinkedIn">
               <LinkedInIcon className="w-5 h-5" />
             </a>
             <a href="mailto:josh@fraqtiv.com" className="text-subtle-text hover:text-brand-primary transition-colors duration-200 transform hover:scale-110" title="Email">
