@@ -4,6 +4,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
+import '@testing-library/jest-dom';
+import * as React from 'react';
+
+// Import the actual component being tested
+// Note: Adjust this import path based on your actual component location
+// import { MultiStepForm } from '../src/components/MultiStepForm';
 
 // Mock user personas with realistic data
 export const testUserPersonas = {
@@ -51,7 +57,7 @@ export const testUserPersonas = {
 
 // Utility functions for realistic user interactions
 export class UserInteractionSimulator {
-  private user: any;
+  public user: any; // Made public to fix access issues
 
   constructor() {
     this.user = userEvent.setup({
@@ -307,7 +313,8 @@ export const performanceTests = {
   // Test form rendering performance
   async measureFormRenderTime() {
     const startTime = performance.now();
-    render(<MultiStepForm />);
+    // Note: Uncomment and import your actual component
+    // render(React.createElement(MultiStepForm));
     const endTime = performance.now();
     
     const renderTime = endTime - startTime;

@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/submit-intake.ts": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node@1.15.4"
     }
   },
   "headers": [
