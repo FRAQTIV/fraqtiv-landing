@@ -292,14 +292,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     const sanitizedData = validation.sanitizedData!;
     
-    // Send emails
-    const userEmailSent = await sendEmail(
+    // Send emails (don't expose email status to client for security)
+    await sendEmail(
       sanitizedData.businessEmail,
       'Thank you for your interest in FRAQTIV',
       getUserEmailTemplate(sanitizedData)
     );
     
-    const adminEmailSent = await sendEmail(
+    await sendEmail(
       ADMIN_EMAIL,
       `New Intake Form Submission - ${sanitizedData.companyName}`,
       getAdminEmailTemplate(sanitizedData)
