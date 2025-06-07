@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAQTIV - Turning Legacy Operations Into Buyer-Ready Growth Engines</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': '#0EA5E9', // sky-500
+              'brand-secondary': '#38BDF8', // sky-400
+              'dark-bg': '#0F172A', // slate-900
+              'dark-card': '#1E293B', // slate-800
+              'light-text': '#F8FAFC', // slate-50
+              'medium-text': '#CBD5E1', // slate-300
+              'subtle-text': '#94A3B8', // slate-400
+            },
+            animation: {
+              'pulse-slow': 'pulse-custom 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              'pulse-custom': {
+                '0%, 100%': { opacity: '0.6' },
+                '50%': { opacity: '0.2' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+          .animation-delay-2000 {
+            animation-delay: 2s;
+          }
+          .animation-delay-4000 {
+            animation-delay: 4s;
+          }
+          html {
+            scroll-behavior: smooth;
+          }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-dark-bg text-light-text font-sans antialiased">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
