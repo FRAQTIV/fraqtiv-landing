@@ -56,6 +56,12 @@ const MultiStepForm: React.FC = () => {
     }
   });
 
+  // Register the painPoints field with validation
+  const { ref, ...painPointsReg } = register('painPoints', { 
+    required: 'Please select at least one pain point',
+    validate: (value) => value && value.length > 0 ? true : 'Please select at least one pain point'
+  });
+
   const totalSteps = 9;
 
   const industryOptions = [
@@ -130,20 +136,9 @@ const MultiStepForm: React.FC = () => {
   }, [currentStep, setFocus]);
 
   const nextStep = async () => {
-    // Special validation for pain points step
-    if (currentStep === 8) {
-      if (watchedPainPoints.length === 0) {
-        return; // Don't proceed if no pain points selected
-      }
-      if (watchedPainPoints.includes('Other')) {
-        const isValid = await trigger(['customPainPoint']);
-        if (!isValid) return;
-      }
-    } else {
-      const fieldsToValidate = getFieldsForStep(currentStep);
-      const isValid = await trigger(fieldsToValidate);
-      if (!isValid) return;
-    }
+    const fieldsToValidate = getFieldsForStep(currentStep);
+    const isValid = await trigger(fieldsToValidate);
+    if (!isValid) return;
     
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
@@ -394,6 +389,12 @@ const MultiStepForm: React.FC = () => {
           {/* Step 8: Pain Points */}
           <Step title="What are your primary pain points? (Select all that apply)" isActive={currentStep === 8}>
             <div className="space-y-4">
+              {/* Hidden input to register painPoints field */}
+              <input
+                type="hidden"
+                {...painPointsReg}
+                value={JSON.stringify(watchedPainPoints)}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {painPointOptions.map((painPoint) => (
                   <button
@@ -428,8 +429,8 @@ const MultiStepForm: React.FC = () => {
                 </div>
               )}
               
-              {watchedPainPoints.length === 0 && (
-                <p className="text-red-400 text-sm mt-4">Please select at least one pain point</p>
+              {errors.painPoints && (
+                <p className="text-red-400 text-sm mt-4">{errors.painPoints.message}</p>
               )}
             </div>
           </Step>

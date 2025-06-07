@@ -48,6 +48,7 @@ const validateAndSanitizeFormData = (data: IntakeFormData): { isValid: boolean; 
   const sanitizedData: IntakeFormData = {
     fullName: sanitizeInput(data.fullName || ''),
     businessEmail: sanitizeInput(data.businessEmail || '').toLowerCase(),
+    phoneNumber: sanitizeInput(data.phoneNumber || ''),
     companyName: sanitizeInput(data.companyName || ''),
     industry: sanitizeInput(data.industry || ''),
     customIndustry: data.customIndustry ? sanitizeInput(data.customIndustry) : undefined,
@@ -65,6 +66,10 @@ const validateAndSanitizeFormData = (data: IntakeFormData): { isValid: boolean; 
   
   if (!sanitizedData.businessEmail || !isValidEmail(sanitizedData.businessEmail)) {
     errors.push('Please provide a valid business email address');
+  }
+  
+  if (!sanitizedData.phoneNumber || sanitizedData.phoneNumber.length < 10) {
+    errors.push('Please provide a valid phone number');
   }
   
   if (!sanitizedData.companyName || sanitizedData.companyName.length < 2) {
@@ -93,7 +98,7 @@ const validateAndSanitizeFormData = (data: IntakeFormData): { isValid: boolean; 
   }
   
   if (sanitizedData.painPoints.includes('Other') && !sanitizedData.customPainPoint) {
-    errors.push('Please specify your custom pain point');
+    errors.push('Please specify a particular pain point');
   }
   
   return {
@@ -111,6 +116,7 @@ Thank you for your interest in FRAQTIV! We've received your information and will
 
 Here's what you shared with us:
 • Company: ${data.companyName}
+• Phone: ${data.phoneNumber}
 • Industry: ${data.industry}${data.customIndustry ? ` - ${data.customIndustry}` : ''}
 • Revenue Range: ${data.revenueRange}
 • Exit Timeline: ${data.exitTimeline}
@@ -134,6 +140,7 @@ New FRAQTIV Intake Form Submission
 Contact Details:
 • Name: ${data.fullName}
 • Email: ${data.businessEmail}
+• Phone: ${data.phoneNumber}
 • Company: ${data.companyName}
 
 Business Information:
