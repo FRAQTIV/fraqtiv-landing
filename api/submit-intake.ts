@@ -227,6 +227,11 @@ const getAdminEmailTemplate = (data: IntakeFormData) => `
 // Secure email sending (no logging of content)
 const sendEmail = async (to: string, subject: string, body: string): Promise<boolean> => {
   if (!SENDGRID_API_KEY) {
+    // Development mode: simulate email sending without actually sending
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Development mode: Email would be sent to:', to.substring(0, 3) + '***');
+      return true; // Simulate success in development
+    }
     // Don't log email content in production
     return false;
   }
