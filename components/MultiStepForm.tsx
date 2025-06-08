@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { ChevronLeftIcon, ChevronRightIcon, CheckIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import ProgressBar from './ProgressBar';
 import Step from './Step';
@@ -52,14 +52,14 @@ const MultiStepForm: React.FC = () => {
     return true;
   };
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue, control } = useForm<IntakeFormData>({
+  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue } = useForm<IntakeFormData>({
     defaultValues: {
       painPoints: []
     }
   });
 
   // Register the painPoints field with validation
-  const { ref, ...painPointsReg } = register('painPoints', { 
+  register('painPoints', {
     required: 'Please select at least one pain point',
     validate: () => watchedPainPoints.length > 0 ? true : 'Please select at least one pain point'
   });
@@ -238,9 +238,11 @@ const MultiStepForm: React.FC = () => {
             break;
           default:
             // For radio button steps, focus the first option
-            const firstRadio = document.querySelector(`input[type="radio"]`) as HTMLInputElement;
-            if (firstRadio) {
-              firstRadio.focus();
+            {
+              const firstRadio = document.querySelector(`input[type="radio"]`) as HTMLInputElement;
+              if (firstRadio) {
+                firstRadio.focus();
+              }
             }
         }
       }, 100);
@@ -674,7 +676,7 @@ const MultiStepForm: React.FC = () => {
           {/* Privacy Statement */}
           <div className="mt-8 mb-6 text-center">
             <p className="text-xs text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              <span className="font-medium">Privacy Notice:</span> FRAQTIV maintains a strict 'no-sell' policy. Under no circumstances will we sell, rent, trade, or otherwise transfer to outside parties any personally identifiable information, except as required by law or with your explicit consent.
+              <span className="font-medium">Privacy Notice:</span> FRAQTIV maintains a strict &apos;no-sell&apos; policy. Under no circumstances will we sell, rent, trade, or otherwise transfer to outside parties any personally identifiable information, except as required by law or with your explicit consent.
             </p>
           </div>
 

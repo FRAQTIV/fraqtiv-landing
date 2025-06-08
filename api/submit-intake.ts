@@ -6,7 +6,7 @@ const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 3;
 const MAX_FIELD_LENGTH = 1000;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^[\+]?[1-9][\d]{0,15}$/; // International phone format
+const PHONE_REGEX = /^[+]?[1-9][\d]{0,15}$/; // International phone format
 
 // SendGrid configuration (server-side only)
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
@@ -47,7 +47,7 @@ const isValidEmail = (email: string): boolean => {
 
 const isValidPhone = (phone: string): boolean => {
   // Remove formatting and check structure
-  const cleaned = phone.replace(/[\s\-\(\)\.]/g, '');
+  const cleaned = phone.replace(/[ \-().]/g, '');
   return PHONE_REGEX.test(cleaned) && cleaned.length >= 7 && cleaned.length <= 16;
 };
 
@@ -246,8 +246,11 @@ const sendEmail = async (to: string, subject: string, body: string): Promise<boo
     await sgMail.send(msg);
     // Only log success, not email content or addresses
     return true;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Log errors without exposing sensitive information
+    if (error instanceof Error) {
+      console.error('Email sending failed:', error.message);
+    }
     return false;
   }
 };

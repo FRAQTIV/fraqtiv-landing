@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 const About: React.FC = () => {
-  const [scrollY, setScrollY] = useState(0);
-
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      // No-op: scrollY state removed
     };
 
     // Only enable parallax on desktop for performance
@@ -34,7 +32,7 @@ const About: React.FC = () => {
             Meet the <span className="text-brand-primary">Architect</span>
           </h2>
           <p className="text-xl text-medium-text max-w-3xl mx-auto">
-            When your business is ready for transformation, experience matters. Meet the operator who's been there, done that—and delivered results.
+            When your business is ready for transformation, experience matters. Meet the operator who&apos;s been there, done that—and delivered results.
           </p>
         </div>
 
@@ -102,7 +100,9 @@ const About: React.FC = () => {
                   Founder & Principal Advisor
                 </p>
                 <p className="text-lg text-medium-text leading-relaxed">
-                  20+ years steering high‑growth companies as CIO, COO, and CEO—delivering hands‑on transformation, not slide decks. Built and exited multiple IT‑centric businesses; created audit‑ready $3M to $10M P&Ls and systematized operations inside 12 months.
+                  20+ years steering high‑growth companies as CIO, COO, and CEO—delivering hands‑on transformation, not slide decks. Built and exited multiple IT‑centric businesses; created audit‑ready $3M to $10M P&amp;Ls and systematized operations inside 12 months.
+                  <br />
+                  He&apos;s led teams through M&amp;A, buy-side diligence, and post-acquisition integration.
                 </p>
               </div>
 
@@ -117,7 +117,7 @@ const About: React.FC = () => {
                     </div>
                     <h4 className="text-lg font-semibold text-brand-secondary mb-3">S3 Framework</h4>
                     <p className="text-medium-text text-sm">
-                      Architect of FRAQTIV's signature methodology: cloud modernization and business‑model validation.
+                      Architect of FRAQTIV&apos;s signature methodology: cloud modernization and business‑model validation.
                     </p>
                   </div>
                 </div>

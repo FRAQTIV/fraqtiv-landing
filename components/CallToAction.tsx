@@ -8,7 +8,7 @@ const CallToAction: React.FC = () => {
           Ready to Remove Deal‑Killing Red Flags?
         </h2>
         <p className="text-lg md:text-xl text-medium-text max-w-3xl mx-auto mb-10">
-          Clients typically see 1–2× multiple expansion driven by stronger tech posture, cleaner ops, and a crystal‑clear revenue story. If your IT, operations, or business model could raise red flags, let's neutralize them now.
+          Clients typically see 1–2× multiple expansion driven by stronger tech posture, cleaner ops, and a crystal‑clear revenue story. If your IT, operations, or business model could raise red flags, let&apos;s neutralize them now.
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-8">
           <a

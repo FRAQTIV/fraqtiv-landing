@@ -13,18 +13,6 @@ const CloudIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-const AutomationIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || "w-8 h-8"}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m18 0h-1.5m-15.036+6.364L6.393 17.607M17.607 6.393 19.071 4.929M6.393 6.393l1.464-1.464M17.607 17.607l-1.464 1.464M12 6.75V3.75m0 16.5V13.5" />
-  </svg>
-);
-
-const BusinessIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || "w-8 h-8"}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H4.5m2.25 0v3m0 0v.375c0 .621.504 1.125 1.125 1.125h.75m0 0H9m-1.5-3V5.25c0-.621.504-1.125 1.125-1.125h.75m0 0h3.75m-3.75 0V4.5c0-.621.504-1.125 1.125-1.125H12m0 0h3.75M12 4.5v.75A.75.75 0 0 1 11.25 6H9.75M12 4.5h.375c.621 0 1.125.504 1.125 1.125v.75m0 0H15m-3.75 0V6m0 0v.375c0 .621.504 1.125 1.125 1.125h.75m0 0V9m-3.75-3v3" />
-  </svg>
-);
-
 const ChartIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || "w-8 h-8"}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
@@ -70,7 +58,7 @@ const Features: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16 md:mb-20">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-light-text mb-4">
-            Our 3‑Step Path to <span className="text-brand-primary">"List‑Ready"</span>
+            Our 3‑Step Path to <span className="text-brand-primary">&ldquo;List‑Ready&rdquo;</span>
           </h2>
           <p className="text-lg md:text-xl text-medium-text max-w-3xl mx-auto">
             FRAQTIV is a specialist team built around an operator DNA, embedding with your leadership to remove structural friction and craft a premium, buyer‑ready growth narrative.

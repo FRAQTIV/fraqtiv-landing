@@ -32,7 +32,7 @@ const ValueProposition: React.FC = () => {
             Why <span className="text-brand-primary">FRAQTIV</span> Gets Results
           </h2>
           <p className="text-lg md:text-xl text-medium-text max-w-4xl mx-auto">
-            We don't just consult—we operate. Our team has built, scaled, and sold companies, bringing real-world experience to your exit preparation with proven frameworks and hands-on transformation.
+            We don&apos;t just consult—we operate. Our team has built, scaled, and sold companies, bringing real-world experience to your exit preparation with proven frameworks and hands-on transformation.
           </p>
         </div>
         
@@ -57,7 +57,7 @@ const ValueProposition: React.FC = () => {
         <div className="bg-dark-card p-8 md:p-12 rounded-2xl shadow-2xl border border-slate-700/50">
           <div className="text-center">
             <blockquote className="text-xl md:text-2xl text-light-text italic mb-6 leading-relaxed">
-              "FRAQTIV is a specialist team built around an operator DNA, embedding with your leadership to remove structural friction and craft a premium, buyer‑ready growth narrative."
+              &ldquo;FRAQTIV is a specialist team built around an operator DNA, embedding with your leadership to remove structural friction and craft a premium, buyer‑ready growth narrative.&rdquo;
             </blockquote>
             <div className="text-brand-primary font-semibold text-lg">
               — Operator-led advisory removing deal‑killing red flags

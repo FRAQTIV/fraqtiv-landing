@@ -22,7 +22,7 @@ const Hero: React.FC = () => {
           <span className="text-brand-secondary font-semibold">IT • Operations • Business‑Model Innovation</span>
         </p>
         <p className="text-base md:text-lg text-medium-text max-w-4xl mx-auto mb-10 leading-relaxed">
-          Buyers don't just buy balance sheets—they buy systems that scale. The big diligence deal‑killers are legacy tech, brittle processes, and fuzzy revenue logic. FRAQTIV plugs in operator‑grade leadership to modernize your IT architecture, streamline operations, and sharpen your business model—sculpt a company that commands a premium.
+          Buyers don&apos;t just buy balance sheets—they buy systems that scale. The big diligence deal‑killers are legacy tech, brittle processes, and fuzzy revenue logic. FRAQTIV plugs in operator‑grade leadership to modernize your IT architecture, streamline operations, and sharpen your business model—sculpt a company that commands a premium.
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
           <Link

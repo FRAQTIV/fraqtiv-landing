@@ -1,11 +1,10 @@
 // QA/sample-automation-script.ts
 // Sample Test Automation Script - User-Focused Testing for FRAQTIV Landing Page
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 import '@testing-library/jest-dom';
-import * as React from 'react';
 
 // Import the actual component being tested
 // Note: Adjust this import path based on your actual component location
@@ -57,7 +56,7 @@ export const testUserPersonas = {
 
 // Utility functions for realistic user interactions
 export class UserInteractionSimulator {
-  public user: any; // Made public to fix access issues
+  public user: ReturnType<typeof userEvent.setup>;
 
   constructor() {
     this.user = userEvent.setup({
@@ -290,7 +289,7 @@ export const userJourneyTests = {
   // Test 5: Mobile Simulation (Touch Events)
   async mobileUserSimulation() {
     // Simulate touch events and mobile-specific behaviors
-    const simulator = new UserInteractionSimulator();
+    // const simulator = new UserInteractionSimulator(); // Removed unused variable
     
     // Simulate mobile viewport
     Object.defineProperty(window, 'innerWidth', { value: 375 });
