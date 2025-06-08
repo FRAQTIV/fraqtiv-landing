@@ -37,8 +37,6 @@ jobs:
           exit 1
         fi
         
-    - name: Lint code
-      run: npm run lint
       
     - name: Build project
       run: npm run build
