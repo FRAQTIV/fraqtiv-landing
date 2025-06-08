@@ -1,25 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 const About: React.FC = () => {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    // Only enable parallax on desktop for performance
-    const isDesktop = window.innerWidth >= 1024;
-    if (isDesktop) {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-    }
-
-    return () => {
-      if (isDesktop) {
-        window.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
 
   return (
     <section id="about" className="py-20 md:py-32 bg-gradient-to-br from-slate-800 via-slate-900 to-dark-bg relative overflow-hidden">
