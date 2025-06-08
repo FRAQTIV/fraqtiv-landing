@@ -276,10 +276,6 @@ const MultiStepForm: React.FC = () => {
         const isValid = await trigger(['customPainPoint']);
         if (!isValid) return;
       }
-    } else if (currentStep === 9) {
-      // Step 9 is the final step - don't auto-advance
-      // User must click Submit button explicitly
-      return;
     } else {
       const fieldsToValidate = getFieldsForStep(currentStep);
       const isValid = await trigger(fieldsToValidate);
@@ -289,16 +285,18 @@ const MultiStepForm: React.FC = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     }
+    // Note: Step 9 is the final step - form submission happens via Submit button, not nextStep()
   };
 
   // Handle Enter key press for navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      // Only allow nextStep navigation, not form submission
       if (currentStep < totalSteps) {
         nextStep();
       }
-      // Don't auto-submit on final step - require explicit button click
+      // On step 9 (final step), Enter does nothing - require explicit Submit button click
     }
   };
 
