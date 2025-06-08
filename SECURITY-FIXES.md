@@ -14,6 +14,7 @@
 **Fix**:
 - Implemented comprehensive server-side validation in serverless function
 - Rate limiting by IP address on server
+- Shared rate limit store via Upstash Redis
 - Input sanitization and validation on server
 - Client-side validation is now just UX enhancement
 
@@ -100,6 +101,8 @@ Browser → Serverless Function → Server validation → SendGrid API (protecte
 ### Vercel Environment Variables
 ```bash
 SENDGRID_API_KEY=your_actual_sendgrid_key_here
+UPSTASH_REDIS_REST_URL=your_upstash_url
+UPSTASH_REDIS_REST_TOKEN=your_upstash_token
 ```
 
 ### Testing

@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import sgMail from '@sendgrid/mail';
+import { Redis } from '@upstash/redis';
 
 // Security constants
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -18,8 +19,8 @@ if (SENDGRID_API_KEY) {
   sgMail.setApiKey(SENDGRID_API_KEY);
 }
 
-// Rate limiting storage (in production, use Redis or similar)
-const rateLimitStore = new Map<string, { count: number; firstRequest: number }>();
+// Shared rate limiting storage via Upstash Redis
+const redis = Redis.fromEnv();
 
 // Types
 interface IntakeFormData {
@@ -51,28 +52,12 @@ const isValidPhone = (phone: string): boolean => {
   return PHONE_REGEX.test(cleaned) && cleaned.length >= 7 && cleaned.length <= 16;
 };
 
-const checkRateLimit = (identifier: string): boolean => {
-  const now = Date.now();
-  const record = rateLimitStore.get(identifier);
-  
-  if (!record) {
-    rateLimitStore.set(identifier, { count: 1, firstRequest: now });
-    return true;
+const checkRateLimit = async (identifier: string): Promise<boolean> => {
+  const requests = await redis.incr(identifier);
+  if (requests === 1) {
+    await redis.expire(identifier, RATE_LIMIT_WINDOW / 1000);
   }
-  
-  // Reset if window expired
-  if (now - record.firstRequest > RATE_LIMIT_WINDOW) {
-    rateLimitStore.set(identifier, { count: 1, firstRequest: now });
-    return true;
-  }
-  
-  // Check if limit exceeded
-  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
-    return false;
-  }
-  
-  record.count++;
-  return true;
+  return requests <= MAX_REQUESTS_PER_WINDOW;
 };
 
 // Validation function
@@ -274,7 +259,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const clientIP = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
     const identifier = Array.isArray(clientIP) ? clientIP[0] : clientIP.toString();
     
-    if (!checkRateLimit(identifier)) {
+    if (!(await checkRateLimit(identifier))) {
       return res.status(429).json({
         success: false,
         message: 'Too many submissions. Please wait a moment before trying again.'
