@@ -31,12 +31,13 @@
 - Server validates both format and length (7-16 digits)
 - Consistent validation between client and server
 
-### 5. **CSP 'unsafe-inline'** ✅ FIXED
+### 5. **CSP 'unsafe-inline'** ✅ POLICY UPDATE
 **Issue**: Content Security Policy allowed inline scripts/styles
-**Fix**:
-- Moved inline Tailwind config to external file (`/src/tailwind.config.js`)
-- Moved inline styles to CSS file
-- Removed `'unsafe-inline'` from CSP headers
+**Decision**:
+- Inline Tailwind config moved to external file (`/src/tailwind.config.js`)
+- Most styles moved to CSS files
+- `'unsafe-inline'` remains in CSP headers to support the importmap script and
+  React components that rely on inline style attributes
 
 ### 6. **Missing Dependency Auditing** ✅ FIXED
 **Issue**: No automated security dependency checking
@@ -88,7 +89,7 @@ Browser → Serverless Function → Server validation → SendGrid API (protecte
 - ✅ Server-side validation and sanitization implemented
 - ✅ Rate limiting by IP address
 - ✅ Console logs stripped from production builds
-- ✅ CSP hardened (no 'unsafe-inline')
+- ✅ CSP policy retained with 'unsafe-inline' for scripts and styles
 - ✅ Dependency auditing automated
 - ✅ GitHub Actions security workflow
 - ✅ Phone number validation strengthened
