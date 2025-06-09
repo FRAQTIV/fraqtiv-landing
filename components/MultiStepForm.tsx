@@ -394,7 +394,10 @@ const MultiStepForm: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
         
-        <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown} className="relative">
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          console.log('Form submit event prevented - use Submit button instead');
+        }} onKeyDown={handleKeyDown} className="relative">
           {/* Step 1: Full Name */}
           <Step title="What's your full name?" isActive={currentStep === 1}>
             <div className="space-y-4">
@@ -717,7 +720,8 @@ const MultiStepForm: React.FC = () => {
               </button>
             ) : (
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit(onSubmit)}
                 disabled={isSubmitting}
                 className="flex items-center bg-brand-primary hover:bg-brand-secondary text-white font-semibold px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
