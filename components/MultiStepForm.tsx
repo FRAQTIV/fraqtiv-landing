@@ -267,15 +267,20 @@ const MultiStepForm: React.FC = () => {
   }, [isCountryDropdownOpen]);
 
   const nextStep = async () => {
+    console.log(`nextStep called: currentStep=${currentStep}, totalSteps=${totalSteps}`);
+    
     // Special handling for pain points step
     if (currentStep === 8) {
+      console.log(`On step 8, painPoints selected: ${watchedPainPoints.length}`);
       if (watchedPainPoints.length === 0) {
+        console.log('No pain points selected, staying on step 8');
         return; // Don't proceed if no pain points selected
       }
       if (watchedPainPoints.includes('Other')) {
         const isValid = await trigger(['customPainPoint']);
         if (!isValid) return;
       }
+      console.log('Step 8 validation passed, advancing to step 9');
     } else {
       const fieldsToValidate = getFieldsForStep(currentStep);
       const isValid = await trigger(fieldsToValidate);
@@ -283,7 +288,10 @@ const MultiStepForm: React.FC = () => {
     }
     
     if (currentStep < totalSteps) {
+      console.log(`Advancing from step ${currentStep} to step ${currentStep + 1}`);
       setCurrentStep(currentStep + 1);
+    } else {
+      console.log(`Already at final step (${currentStep}), not advancing`);
     }
     // Note: Step 9 is the final step - form submission happens via Submit button, not nextStep()
   };
