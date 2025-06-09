@@ -13,7 +13,9 @@
     "audit": "npm audit",
     "audit-fix": "npm audit fix",
     "security-check": "npm audit --audit-level moderate",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "pre-merge": "npm run lint && npm run build && npm run test",
+    "test:ci": "jest --passWithNoTests --watchAll=false"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

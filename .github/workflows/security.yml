@@ -2,7 +2,7 @@ name: Security Audit
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, dev ]
   pull_request:
     branches: [ main ]
   schedule:
@@ -39,6 +39,9 @@ jobs:
         
     - name: Lint code
       run: npm run lint
+      
+    - name: Run unit tests
+      run: npm run test:ci
       
     - name: Build project
       run: npm run build
