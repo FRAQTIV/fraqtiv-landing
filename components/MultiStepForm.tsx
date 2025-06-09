@@ -268,20 +268,15 @@ const MultiStepForm: React.FC = () => {
   }, [isCountryDropdownOpen]);
 
   const nextStep = async () => {
-    console.log(`nextStep called: currentStep=${currentStep}, totalSteps=${totalSteps}`);
-    
     // Special handling for pain points step
     if (currentStep === 8) {
-      console.log(`On step 8, painPoints selected: ${watchedPainPoints.length}`);
       if (watchedPainPoints.length === 0) {
-        console.log('No pain points selected, staying on step 8');
         return; // Don't proceed if no pain points selected
       }
       if (watchedPainPoints.includes('Other')) {
         const isValid = await trigger(['customPainPoint']);
         if (!isValid) return;
       }
-      console.log('Step 8 validation passed, advancing to step 9');
     } else {
       const fieldsToValidate = getFieldsForStep(currentStep);
       const isValid = await trigger(fieldsToValidate);
@@ -289,15 +284,7 @@ const MultiStepForm: React.FC = () => {
     }
     
     if (currentStep < totalSteps) {
-      console.log(`Advancing from step ${currentStep} to step ${currentStep + 1}`);
       setCurrentStep(currentStep + 1);
-      
-      // Check if advancing to step 9 triggers something
-      if (currentStep + 1 === 9) {
-        console.log('🔍 Advanced to step 9, checking for auto-submit triggers...');
-      }
-    } else {
-      console.log(`Already at final step (${currentStep}), not advancing`);
     }
     // Note: Step 9 is the final step - form submission happens via Submit button, not nextStep()
   };
@@ -336,14 +323,8 @@ const MultiStepForm: React.FC = () => {
   };
 
   const onSubmit = async (data: IntakeFormData) => {
-    console.log('🚨 onSubmit called! This should only happen when Submit button is clicked');
-    console.log('Current step:', currentStep);
-    console.log('Call stack:', new Error().stack);
-    console.log('Form data:', data);
-    
     // Only allow submission on step 9
     if (currentStep !== 9) {
-      console.log('❌ Preventing submission - not on final step');
       return;
     }
     
@@ -409,7 +390,6 @@ const MultiStepForm: React.FC = () => {
         
         <form onSubmit={(e) => {
           e.preventDefault();
-          console.log('Form submit event prevented - use Submit button instead');
         }} onKeyDown={handleKeyDown} className="relative">
           {/* Step 1: Full Name */}
           <Step title="What's your full name?" isActive={currentStep === 1}>
@@ -735,7 +715,6 @@ const MultiStepForm: React.FC = () => {
               <button
                 type="button"
                 onClick={async () => {
-                  console.log('✅ Submit button clicked explicitly');
                   const formData = getValues();
                   await onSubmit(formData);
                 }}
