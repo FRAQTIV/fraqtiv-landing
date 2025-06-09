@@ -330,6 +330,10 @@ const MultiStepForm: React.FC = () => {
   };
 
   const onSubmit = async (data: IntakeFormData) => {
+    console.log('🚨 onSubmit called! This should only happen when Submit button is clicked');
+    console.log('Current step:', currentStep);
+    console.log('Form data:', data);
+    
     setIsSubmitting(true);
     try {
       // Combine country code with phone number and use state for pain points
