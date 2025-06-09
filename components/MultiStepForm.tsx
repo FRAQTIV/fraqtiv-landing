@@ -52,7 +52,7 @@ const MultiStepForm: React.FC = () => {
     return true;
   };
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue, getValues } = useForm<IntakeFormData>({
+  const { register, formState: { errors }, watch, trigger, setFocus, setValue, getValues } = useForm<IntakeFormData>({
     defaultValues: {
       painPoints: []
     }

@@ -5,6 +5,7 @@
 import '@testing-library/jest-dom';
 
 // Polyfill for TextEncoder/TextDecoder
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { TextEncoder, TextDecoder } = require('util');
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
