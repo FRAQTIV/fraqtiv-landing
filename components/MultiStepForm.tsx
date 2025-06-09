@@ -234,7 +234,8 @@ const MultiStepForm: React.FC = () => {
             setFocus('companyName');
             break;
           case 9:
-            setFocus('additionalNotes');
+            // Don't auto-focus on step 9 to prevent auto-submit
+            // setFocus('additionalNotes');
             break;
           default:
             // For radio button steps, focus the first option
@@ -290,6 +291,11 @@ const MultiStepForm: React.FC = () => {
     if (currentStep < totalSteps) {
       console.log(`Advancing from step ${currentStep} to step ${currentStep + 1}`);
       setCurrentStep(currentStep + 1);
+      
+      // Check if advancing to step 9 triggers something
+      if (currentStep + 1 === 9) {
+        console.log('🔍 Advanced to step 9, checking for auto-submit triggers...');
+      }
     } else {
       console.log(`Already at final step (${currentStep}), not advancing`);
     }
@@ -332,7 +338,14 @@ const MultiStepForm: React.FC = () => {
   const onSubmit = async (data: IntakeFormData) => {
     console.log('🚨 onSubmit called! This should only happen when Submit button is clicked');
     console.log('Current step:', currentStep);
+    console.log('Call stack:', new Error().stack);
     console.log('Form data:', data);
+    
+    // Only allow submission on step 9
+    if (currentStep !== 9) {
+      console.log('❌ Preventing submission - not on final step');
+      return;
+    }
     
     setIsSubmitting(true);
     try {
