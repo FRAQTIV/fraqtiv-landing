@@ -52,7 +52,7 @@ const MultiStepForm: React.FC = () => {
     return true;
   };
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue } = useForm<IntakeFormData>({
+  const { register, handleSubmit, formState: { errors }, watch, trigger, setFocus, setValue, getValues } = useForm<IntakeFormData>({
     defaultValues: {
       painPoints: []
     }
@@ -734,7 +734,11 @@ const MultiStepForm: React.FC = () => {
             ) : (
               <button
                 type="button"
-                onClick={handleSubmit(onSubmit)}
+                onClick={async () => {
+                  console.log('✅ Submit button clicked explicitly');
+                  const formData = getValues();
+                  await onSubmit(formData);
+                }}
                 disabled={isSubmitting}
                 className="flex items-center bg-brand-primary hover:bg-brand-secondary text-white font-semibold px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
