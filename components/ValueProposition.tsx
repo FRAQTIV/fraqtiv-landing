@@ -39,14 +39,14 @@ const ValueProposition: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {metrics.map((metric, index) => (
             <div key={index} className="text-center group h-full">
-              <div className="bg-dark-card p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-slate-700/50 hover:border-brand-primary/30 h-full flex flex-col">
+              <div className="bg-dark-card p-6 md:p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-slate-700/50 hover:border-brand-primary/30 h-full flex flex-col min-h-[280px]">
                 <div className="text-4xl md:text-5xl font-bold text-brand-primary mb-4 group-hover:text-brand-secondary transition-colors duration-300">
                   {metric.value}
                 </div>
-                <div className="text-lg font-semibold text-light-text mb-3 min-h-[3.5rem] flex items-center justify-center">
+                <div className="text-lg font-semibold text-light-text mb-3 min-h-[4rem] flex items-center justify-center text-center leading-tight">
                   {metric.label}
                 </div>
-                <div className="text-sm text-medium-text flex-grow flex items-center justify-center text-center">
+                <div className="text-sm text-medium-text flex-grow flex items-start justify-center text-center leading-relaxed px-2">
                   {metric.description}
                 </div>
               </div>
